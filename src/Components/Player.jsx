@@ -1,7 +1,7 @@
 import {Component} from "react";
 import {useState} from "react";
 
-export default function Player({initialName, symbol, isActive}) {
+export default function Player({initialName, symbol, isActive, onChangeName}) {
     const [player, setPlayerName] = useState(initialName);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -22,6 +22,7 @@ export default function Player({initialName, symbol, isActive}) {
          * 함수형으로 작성해주도록 하자.
           */
         setIsEditing(e => !e);
+        if(isEditing) onChangeName(symbol, player);
     }
 
     function handleChange(event){

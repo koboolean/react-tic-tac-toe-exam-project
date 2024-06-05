@@ -24,6 +24,11 @@ const initialGameBoard = [
 function App() {
     const [gameTurns, setGameTurns] = useState([]);
 
+    const [players, setPayers] = useState({
+        X: 'Player 1',
+        O: 'Player 2'
+    });
+
     // 중복되는 기능의 useState를 제거하기 위해 아래의 값을 제거를 할 때 다음과 같이 추가가 될 수 있다.
     //const [activePlayer, setActivePlayer] = useState('X');
 
@@ -54,7 +59,7 @@ function App() {
         const thirdSymbol = gameBoard[combination[2].row][combination[2].column];
 
         if(firstSymbol && firstSymbol === secondSymbol && firstSymbol === thirdSymbol){
-            winner = firstSymbol;
+            winner = players[firstSymbol];
         }
     }
 
@@ -83,12 +88,21 @@ function App() {
         setGameTurns([]);
     }
 
+    function handlePalyerNameChange(symbol, newName){
+        setPayers(prevPlayers => {
+            return {
+                ...prevPlayers,
+                [symbol]: newName
+            }
+        });
+    }
+
     return (
       <main>
         <div id="game-container">
           <ol id="players" className="highlight-player">
-            <Player initialName="Player 1" symbol="X" isActive={activePlayer === "X"}/>
-            <Player initialName="Player 2" symbol="O" isActive={activePlayer === "O"}/>
+            <Player initialName="Player 1" symbol="X" isActive={activePlayer === "X"} onChangeName={handlePalyerNameChange}/>
+            <Player initialName="Player 2" symbol="O" isActive={activePlayer === "O"} onChangeName={handlePalyerNameChange}/>
           </ol>
           {(winner || hasDraw) && <GameOver winner={winner} onRestart={handleRematch}/>}
           <GameBoard onSelectSquare={handleSelectSquare} gameBoard={gameBoard}/>
